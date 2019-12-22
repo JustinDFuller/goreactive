@@ -1,28 +1,13 @@
 package goreactive
 
 import (
+  "github.com/justindfuller/goreactive/component"
+
   "fmt"
 )
 
-type Node struct {
-  Type string
-  Children []interface{}
+func RenderToString(c component.Component) string {
+  node := c.Render()
+  return fmt.Sprintf("%s%s%s", node.TagOpen(), node.RenderChildren(), node.TagClose())
 }
 
-type Props struct {}
-
-type Component interface {
-  Render() *Node
-}
-
-func RenderToString(component Component) string {
-  node := component.Render()
-  return fmt.Sprintf("<%s>%s<%s>", node.Type, node.Children[0], node.Type)
-}
-
-func CreateElement(elementType string, props *Props, children string) *Node {
-  return &Node{
-    Type: elementType,
-    Children: []interface{}{children},
-  }
-}
