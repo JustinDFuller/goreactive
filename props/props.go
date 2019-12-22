@@ -1,7 +1,7 @@
 package props
 
-type Props struct {}
+type Props struct{}
 
 func New() *Props {
-  return &Props{}
+	return &Props{}
 }
