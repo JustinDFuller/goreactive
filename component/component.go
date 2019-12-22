@@ -1,9 +1,9 @@
 package component
 
 import (
-  "github.com/justindfuller/goreactive/nodes"
+  "github.com/justindfuller/goreactive/node"
 )
 
 type Component interface {
-  Render() nodes.Node
+  Render() node.Node
 }

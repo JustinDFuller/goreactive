@@ -1,4 +1,4 @@
-package nodes
+package node
 
 import (
   "github.com/justindfuller/goreactive/props"
@@ -7,9 +7,7 @@ import (
 )
 
 type Node interface {
-  TagOpen() string
-  TagClose() string
-  RenderChildren() string
+  ToString() string
 }
 
 type Element struct {
@@ -17,22 +15,26 @@ type Element struct {
   Children []Node
 }
 
-func (e *Element) TagOpen() string {
-  return fmt.Sprintf("<%s>", e.Type)
-}
-
-func (e *Element) TagClose() string {
-  return fmt.Sprintf("</%s>", e.Type)
-}
-
-func (e *Element) RenderChildren() string {
-  children := ""
+func (e *Element) ToString() string {
+  var channels []chan string
+  var children string
 
   for _, child := range e.Children {
-    children += fmt.Sprintf("%s%s%s", child.TagOpen(), child.RenderChildren(), child.TagClose())
+    channel := make(chan string)
+
+    go func(child Node) {
+      channel <- child.ToString()
+    }(child)
+
+    channels = append(channels, channel)
   }
 
-  return children
+  for _, channel := range channels {
+    str := <-channel
+    children += str
+  }
+
+  return fmt.Sprintf("<%s>%s</%s>", e.Type, children, e.Type)
 }
 
 func Create(nodetype string, props *props.Props, children []Node) Node {
@@ -56,15 +58,7 @@ type TextElement struct {
   text string 
 } 
 
-func (_ *TextElement) TagOpen() string {
-  return ""
-}
-
-func (_ *TextElement) TagClose() string {
-  return ""
-}
-
-func (e *TextElement) RenderChildren() string {
+func (e *TextElement) ToString() string {
   return e.text
 }
 

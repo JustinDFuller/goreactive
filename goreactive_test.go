@@ -2,7 +2,7 @@ package goreactive
 
 import (
   "github.com/justindfuller/goreactive/tags"
-  "github.com/justindfuller/goreactive/nodes"
+  "github.com/justindfuller/goreactive/node"
   "github.com/justindfuller/goreactive/props"
 
   "testing"
@@ -16,8 +16,8 @@ const (
 // helloWorld tests the very basic mechanisms of rendering html.
 type helloWorld struct {}
 
-func (_ helloWorld) Render() nodes.Node {
-  return nodes.Create(tags.P, props.New(), nodes.Children(nodes.Text("Hello World")))
+func (_ helloWorld) Render() node.Node {
+  return node.Create(tags.P, props.New(), node.Children(node.Text("Hello World")))
 }
 
 func TestRenderToString(t *testing.T) {
@@ -31,20 +31,20 @@ func TestRenderToString(t *testing.T) {
 // withChildren tests the mechanisms for rendering child components.
 type withChildren struct {}
 
-func (_ withChildren) Render() nodes.Node {
-  return nodes.Create(
+func (_ withChildren) Render() node.Node {
+  return node.Create(
     tags.Ul,
     props.New(),
-    nodes.Children(
-      nodes.Create(
+    node.Children(
+      node.Create(
         tags.Li,
         props.New(),
-        nodes.Children(nodes.Text("one")),
+        node.Children(node.Text("one")),
       ),
-      nodes.Create(
+      node.Create(
         tags.Li,
         props.New(),
-        nodes.Children(nodes.Text("two")),
+        node.Children(node.Text("two")),
       ),
     ),
   )
