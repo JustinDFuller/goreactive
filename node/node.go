@@ -4,6 +4,7 @@ import (
 	"github.com/justindfuller/goreactive/props"
 
 	"fmt"
+	"strings"
 )
 
 type Node interface {
@@ -17,7 +18,7 @@ type Element struct {
 
 func (e *Element) ToString() string {
 	var channels []chan string
-	var children string
+	var children strings.Builder
 
 	for _, child := range e.Children {
 		channel := make(chan string)
@@ -30,11 +31,10 @@ func (e *Element) ToString() string {
 	}
 
 	for _, channel := range channels {
-		str := <-channel
-		children += str
+		children.WriteString(<-channel)
 	}
 
-	return fmt.Sprintf("<%s>%s</%s>", e.Type, children, e.Type)
+	return fmt.Sprintf("<%s>%s</%s>", e.Type, children.String(), e.Type)
 }
 
 func Create(nodetype string, props *props.Props, children []Node) Node {
