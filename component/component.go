@@ -7,3 +7,7 @@ import (
 type Component interface {
 	Render() node.Node
 }
+
+func New(c Component) node.Node {
+	return c.Render()
+}

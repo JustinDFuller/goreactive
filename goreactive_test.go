@@ -1,8 +1,8 @@
 package goreactive
 
 import (
+	"github.com/justindfuller/goreactive/component"
 	"github.com/justindfuller/goreactive/node"
-	"github.com/justindfuller/goreactive/props"
 	"github.com/justindfuller/goreactive/tags"
 
 	"testing"
@@ -17,7 +17,7 @@ const (
 type helloWorld struct{}
 
 func (_ helloWorld) Render() node.Node {
-	return node.Create(tags.P, props.New(), node.Children(node.Text("Hello World")))
+	return node.New(tags.P, node.Children(node.Text("Hello World")))
 }
 
 func TestRenderToString(t *testing.T) {
@@ -32,18 +32,15 @@ func TestRenderToString(t *testing.T) {
 type withChildren struct{}
 
 func (_ withChildren) Render() node.Node {
-	return node.Create(
+	return node.New(
 		tags.Ul,
-		props.New(),
 		node.Children(
-			node.Create(
+			node.New(
 				tags.Li,
-				props.New(),
 				node.Children(node.Text("one")),
 			),
-			node.Create(
+			node.New(
 				tags.Li,
-				props.New(),
 				node.Children(node.Text("two")),
 			),
 		),
@@ -56,4 +53,25 @@ func TestChildrenRenderToString(t *testing.T) {
 	if result != childrenExpected {
 		t.Fatalf("Expected '%s'. Got '%s'.", childrenExpected, result)
 	}
+}
+
+type childComponent struct {
+	text string
+}
+
+func (c childComponent) Render() node.Node {
+	return node.New(
+		tags.Div,
+		node.Children(node.Text(c.text)),
+	)
+}
+
+type withChildComponent struct{}
+
+func (_ withChildComponent) Render() node.Node {
+	return component.New(
+		childComponent{
+			text: "Child component props!",
+		},
+	)
 }

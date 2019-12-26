@@ -1,8 +1,6 @@
 package node
 
 import (
-	"github.com/justindfuller/goreactive/props"
-
 	"fmt"
 	"strings"
 )
@@ -37,7 +35,7 @@ func (e *Element) ToString() string {
 	return fmt.Sprintf("<%s>%s</%s>", e.Type, children.String(), e.Type)
 }
 
-func Create(nodetype string, props *props.Props, children []Node) Node {
+func New(nodetype string, children []Node) Node {
 	return &Element{
 		Type:     nodetype,
 		Children: children,
