@@ -3,7 +3,7 @@ package goreactive
 import (
 	"github.com/justindfuller/goreactive/component"
 	"github.com/justindfuller/goreactive/node"
-	"github.com/justindfuller/goreactive/tags"
+	"github.com/justindfuller/goreactive/tag"
 
 	"testing"
 )
@@ -18,7 +18,7 @@ const (
 type helloWorld struct{}
 
 func (_ *helloWorld) Render() node.Node {
-	return node.New(tags.P, node.Children(node.Text("Hello World")))
+	return node.New(tag.P, node.Children(node.Text("Hello World")))
 }
 
 func TestRenderToString(t *testing.T) {
@@ -34,14 +34,14 @@ type withChildren struct{}
 
 func (_ *withChildren) Render() node.Node {
 	return node.New(
-		tags.Ul,
+		tag.Ul,
 		node.Children(
 			node.New(
-				tags.Li,
+				tag.Li,
 				node.Children(node.Text("one")),
 			),
 			node.New(
-				tags.Li,
+				tag.Li,
 				node.Children(node.Text("two")),
 			),
 		),
@@ -62,7 +62,7 @@ type childComponent struct {
 
 func (c childComponent) Render() node.Node {
 	return node.New(
-		tags.Div,
+		tag.Div,
 		node.Children(node.Text(c.text)),
 	)
 }

@@ -1,6 +1,8 @@
 package node
 
 import (
+	"github.com/justindfuller/goreactive/tag"
+
 	"fmt"
 	"strings"
 )
@@ -10,7 +12,7 @@ type Node interface {
 }
 
 type Element struct {
-	Type     string
+	Tag      tag.Tag
 	Children []Node
 }
 
@@ -32,12 +34,12 @@ func (e *Element) ToString() string {
 		children.WriteString(<-channel)
 	}
 
-	return fmt.Sprintf("<%s>%s</%s>", e.Type, children.String(), e.Type)
+	return fmt.Sprintf("<%s>%s</%s>", e.Tag, children.String(), e.Tag)
 }
 
-func New(nodetype string, children []Node) Node {
+func New(nodetype tag.Tag, children []Node) Node {
 	return &Element{
-		Type:     nodetype,
+		Tag:      nodetype,
 		Children: children,
 	}
 }
