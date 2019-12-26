@@ -28,4 +28,3 @@ func Children(children ...Node) []Node {
 
 	return childNodes
 }
-

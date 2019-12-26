@@ -1,10 +1,10 @@
 package node
 
 import (
-  "github.com/justindfuller/goreactive/tags"
+	"github.com/justindfuller/goreactive/tag"
 
-  "fmt"
-  "strings"  
+	"fmt"
+	"strings"
 )
 
 type Element struct {
