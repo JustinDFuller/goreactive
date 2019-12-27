@@ -2,10 +2,12 @@ package node
 
 import (
 	"github.com/justindfuller/goreactive/tag"
+
+	"io"
 )
 
 type Node interface {
-	ToString() string
+	ToString(out io.Writer)
 }
 
 func New(nodetype tag.Tag, children []Node) Node {
@@ -15,8 +17,9 @@ func New(nodetype tag.Tag, children []Node) Node {
 	}
 }
 
-func toString(channel chan<- string, node Node) {
-	channel <- node.ToString()
+func toString(done chan<- io.ReadWriter, node Node, out io.ReadWriter) {
+	node.ToString(out)
+	done <- out
 }
 
 func Children(children ...Node) []Node {

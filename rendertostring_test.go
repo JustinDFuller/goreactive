@@ -5,6 +5,7 @@ import (
 	"github.com/justindfuller/goreactive/node"
 	"github.com/justindfuller/goreactive/tag"
 
+	"strings"
 	"testing"
 )
 
@@ -22,9 +23,10 @@ func (_ *helloWorld) Render() node.Node {
 }
 
 func TestRenderToString(t *testing.T) {
-	result := RenderToString(&helloWorld{})
+	var result strings.Builder
+	RenderToString(&helloWorld{}, &result)
 
-	if result != ExpectedHelloWorld {
+	if result := result.String(); result != ExpectedHelloWorld {
 		t.Fatalf("Expected '%s'. Got '%s'.", ExpectedHelloWorld, result)
 	}
 }
@@ -49,9 +51,10 @@ func (_ *withChildren) Render() node.Node {
 }
 
 func TestChildrenRenderToString(t *testing.T) {
-	result := RenderToString(&withChildren{})
+	var result strings.Builder
+	RenderToString(&withChildren{}, &result)
 
-	if result != ExpectedChildren {
+	if result := result.String(); result != ExpectedChildren {
 		t.Fatalf("Expected '%s'. Got '%s'.", ExpectedChildren, result)
 	}
 }
@@ -78,9 +81,10 @@ func (_ *withChildComponent) Render() node.Node {
 }
 
 func TestChildComponent(t *testing.T) {
-	result := RenderToString(&withChildComponent{})
+	var result strings.Builder
+	RenderToString(&withChildComponent{}, &result)
 
-	if result != ExpectedChildComponent {
+	if result := result.String(); result != ExpectedChildComponent {
 		t.Fatalf("Expected '%s'. Got '%s'.", ExpectedChildComponent, result)
 	}
 }

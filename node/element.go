@@ -3,8 +3,9 @@ package node
 import (
 	"github.com/justindfuller/goreactive/tag"
 
+	"bytes"
 	"fmt"
-	"strings"
+	"io"
 )
 
 type Element struct {
@@ -12,29 +13,32 @@ type Element struct {
 	Children []Node
 }
 
-func (e *Element) ToString() string {
-	var channels []chan string
-	var children strings.Builder
+func (e *Element) ToString(out io.Writer) {
+	var channels []chan io.ReadWriter
+
+	fmt.Fprintf(out, "<%s>", e.Tag)
 
 	for _, child := range e.Children {
-		channel := make(chan string)
+		var childString bytes.Buffer
+		channel := make(chan io.ReadWriter)
 		channels = append(channels, channel)
-		go toString(channel, child)
+		go toString(channel, child, &childString)
 	}
 
 	for _, channel := range channels {
-		children.WriteString(<-channel)
+		child := <-channel
+		io.Copy(out, child)
 	}
 
-	return fmt.Sprintf("<%s>%s</%s>", e.Tag, children.String(), e.Tag)
+	fmt.Fprintf(out, "</%s>", e.Tag)
 }
 
 type TextElement struct {
 	text string
 }
 
-func (e *TextElement) ToString() string {
-	return e.text
+func (e *TextElement) ToString(out io.Writer) {
+	fmt.Fprint(out, e.text)
 }
 
 func Text(text string) Node {

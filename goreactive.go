@@ -2,9 +2,15 @@ package goreactive
 
 import (
 	"github.com/justindfuller/goreactive/component"
+
+	"io"
 )
 
-func RenderToString(c component.Component) string {
+func RenderToString(c component.Component, out io.Writer) {
 	node := c.Render()
-	return node.ToString()
+	node.ToString(out)
+}
+
+func Parse(str string) string {
+	return ""
 }
