@@ -19,17 +19,17 @@ func TestRenderToString(t *testing.T) {
 	tests := []RenderToStringTest{
 		{
 			name:     "Hello World",
-			expected: ExpectedHelloWorld,
+			expected: "<p>Hello World</p>",
 			input:    &helloWorld{},
 		},
 		{
 			name:     "With Children",
-			expected: ExpectedChildren,
+			expected: "<ul><li>one</li><li>two</li></ul>",
 			input:    &withChildren{},
 		},
 		{
 			name:     "Child Component",
-			expected: ExpectedChildComponent,
+			expected: "<div>Child component props!</div>",
 			input:    &withChildComponent{},
 		},
 	}
@@ -46,12 +46,6 @@ func TestRenderToString(t *testing.T) {
 	}
 }
 
-const (
-	ExpectedHelloWorld     = "<p>Hello World</p>"
-	ExpectedChildren       = "<ul><li>one</li><li>two</li></ul>"
-	ExpectedChildComponent = "<div>Child component props!</div>"
-)
-
 // helloWorld tests the very basic mechanisms of rendering html.
 type helloWorld struct{}
 
@@ -59,7 +53,7 @@ func (_ *helloWorld) Render() node.Node {
 	return node.New(tag.P, node.Children(node.Text("Hello World")))
 }
 
-// withChildren tests the mechanisms for rendering child components.
+// withChildren tests the mechanisms for rendering child nodes.
 type withChildren struct{}
 
 func (_ *withChildren) Render() node.Node {
@@ -78,6 +72,7 @@ func (_ *withChildren) Render() node.Node {
 	)
 }
 
+// childComponent tests the mechanisms for rendering child components.
 type childComponent struct {
 	text string
 }
