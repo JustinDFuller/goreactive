@@ -8,10 +8,16 @@ import (
 	"io"
 )
 
-type Element struct {
-	Tag      tag.Tag
-	Children []Node
-}
+type (
+  Element struct {
+    Tag      tag.Tag
+    Children []Node
+  }
+
+  TextElement struct {
+    text string
+  }
+)
 
 func (e *Element) ToString(out io.Writer) {
 	var channels []chan io.ReadWriter
@@ -31,10 +37,6 @@ func (e *Element) ToString(out io.Writer) {
 	}
 
 	fmt.Fprintf(out, "</%s>", e.Tag)
-}
-
-type TextElement struct {
-	text string
 }
 
 func (e *TextElement) ToString(out io.Writer) {
