@@ -1,8 +1,8 @@
 .PHONY: test
 test: 
+	@gofmt -l -w -s *.go ./**/*.go;
 	@go vet ./...;
 	@go test -v -race -vet=off ./...;
-	@gofmt -l -w -s *.go ./**/*.go;
 
 .PHONY: bench
 bench: test

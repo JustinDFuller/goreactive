@@ -9,14 +9,14 @@ import (
 )
 
 type (
-  Element struct {
-    Tag      tag.Tag
-    Children []Node
-  }
+	Element struct {
+		Tag      tag.Tag
+		Children []Node
+	}
 
-  TextElement struct {
-    text string
-  }
+	TextElement struct {
+		text string
+	}
 )
 
 func (e *Element) ToString(out io.Writer) {

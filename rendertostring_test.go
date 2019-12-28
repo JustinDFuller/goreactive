@@ -9,6 +9,43 @@ import (
 	"testing"
 )
 
+type RenderToStringTest struct {
+	name     string
+	expected string
+	input    component.Component
+}
+
+func TestRenderToString(t *testing.T) {
+	tests := []RenderToStringTest{
+		{
+			name:     "Hello World",
+			expected: ExpectedHelloWorld,
+			input:    &helloWorld{},
+		},
+		{
+			name:     "With Children",
+			expected: ExpectedChildren,
+			input:    &withChildren{},
+		},
+		{
+			name:     "Child Component",
+			expected: ExpectedChildComponent,
+			input:    &withChildComponent{},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			var result strings.Builder
+			RenderToString(test.input, &result)
+
+			if result := result.String(); result != test.expected {
+				t.Fatalf("Expected '%s'. Got '%s'.", test.expected, result)
+			}
+		})
+	}
+}
+
 const (
 	ExpectedHelloWorld     = "<p>Hello World</p>"
 	ExpectedChildren       = "<ul><li>one</li><li>two</li></ul>"
@@ -20,15 +57,6 @@ type helloWorld struct{}
 
 func (_ *helloWorld) Render() node.Node {
 	return node.New(tag.P, node.Children(node.Text("Hello World")))
-}
-
-func TestRenderToString(t *testing.T) {
-	var result strings.Builder
-	RenderToString(&helloWorld{}, &result)
-
-	if result := result.String(); result != ExpectedHelloWorld {
-		t.Fatalf("Expected '%s'. Got '%s'.", ExpectedHelloWorld, result)
-	}
 }
 
 // withChildren tests the mechanisms for rendering child components.
@@ -50,15 +78,6 @@ func (_ *withChildren) Render() node.Node {
 	)
 }
 
-func TestChildrenRenderToString(t *testing.T) {
-	var result strings.Builder
-	RenderToString(&withChildren{}, &result)
-
-	if result := result.String(); result != ExpectedChildren {
-		t.Fatalf("Expected '%s'. Got '%s'.", ExpectedChildren, result)
-	}
-}
-
 type childComponent struct {
 	text string
 }
@@ -78,13 +97,4 @@ func (_ *withChildComponent) Render() node.Node {
 			text: "Child component props!",
 		},
 	)
-}
-
-func TestChildComponent(t *testing.T) {
-	var result strings.Builder
-	RenderToString(&withChildComponent{}, &result)
-
-	if result := result.String(); result != ExpectedChildComponent {
-		t.Fatalf("Expected '%s'. Got '%s'.", ExpectedChildComponent, result)
-	}
 }

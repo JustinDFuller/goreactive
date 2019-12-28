@@ -3,6 +3,7 @@ package goreactive
 import (
 	"github.com/justindfuller/goreactive/component"
 
+	"fmt"
 	"io"
 )
 
@@ -11,6 +12,6 @@ func RenderToString(c component.Component, out io.Writer) {
 	node.ToString(out)
 }
 
-func Parse(str string) string {
-	return ""
+func Parse(str string, out io.Writer) {
+	fmt.Fprint(out, "")
 }
