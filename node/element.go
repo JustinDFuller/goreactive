@@ -25,15 +25,15 @@ func (e *Element) ToString(out io.Writer) {
 	fmt.Fprintf(out, "<%s>", e.Tag)
 
 	for _, child := range e.Children {
-		var childString bytes.Buffer
+		var buf bytes.Buffer
 		channel := make(chan io.ReadWriter)
 		channels = append(channels, channel)
-		go toString(channel, child, &childString)
+		go toString(channel, child, &buf)
 	}
 
 	for _, channel := range channels {
-		child := <-channel
-		io.Copy(out, child)
+		buf := <-channel
+		io.Copy(out, buf)
 	}
 
 	fmt.Fprintf(out, "</%s>", e.Tag)
